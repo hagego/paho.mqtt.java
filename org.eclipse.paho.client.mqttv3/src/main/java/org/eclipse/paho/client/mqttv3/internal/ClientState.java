@@ -764,8 +764,8 @@ public class ClientState {
                 if ((pingOutstanding == 0 && (time - lastInboundActivity >= keepAlive - delta)) ||
                     (time - lastOutboundActivity >= keepAlive - delta)) {
 
-                    //@TRACE 620=ping needed. keepAlive={0} lastOutboundActivity={1} lastInboundActivity={2}                                                                                                              
-                    log.fine(CLASS_NAME,methodName,"620", new Object[]{ Long.valueOf(this.keepAlive), Long.valueOf(lastOutboundActivity), Long.valueOf(lastInboundActivity)});
+                    //@TRACE 620=ping needed. keepAlive={0} lastOutboundActivity={1} lastInboundActivity={2} time={3}                                                                                                              
+                    log.fine(CLASS_NAME,methodName,"620", new Object[]{ Long.valueOf(this.keepAlive), Long.valueOf(lastOutboundActivity), Long.valueOf(lastInboundActivity), Long.valueOf(time)});
 
                     // pingOutstanding++;  // it will be set after the ping has been written on the wire                                                                                                             
                     // lastPing = time;    // it will be set after the ping has been written on the wire                                                                                                             
@@ -782,9 +782,9 @@ public class ClientState {
                     notifyQueueLock();
                 }
                 else {
-                		//@TRACE 634=ping not needed yet. Schedule next ping.
-                    log.fine(CLASS_NAME, methodName, "634", null);
-                    nextPingTime = Math.max(1,  getKeepAlive() - (time - lastOutboundActivity));
+                		//@TRACE 634=ping not needed yet. keepAlive={0} lastOutboundActivity={1} lastInboundActivity={2} time={3}
+                    log.fine(CLASS_NAME, methodName, "634", new Object[]{ Long.valueOf(this.keepAlive), Long.valueOf(lastOutboundActivity), Long.valueOf(lastInboundActivity), Long.valueOf(time)});
+                    nextPingTime = Math.max(1,  (keepAlive - (time - lastOutboundActivity))/1000000); // milliseconds needed for nextPingTime
                 }
             }
             //@TRACE 624=Schedule next ping at {0}                                                                                                                                                                                
